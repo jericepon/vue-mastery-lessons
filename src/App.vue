@@ -6,23 +6,38 @@
         </div>
     </div>
     <Product @add-to-cart="updateCart" :premium="premium" />
+    <div>
+        <h2>Reviews</h2>
+        <p v-if="!reviews.length">There are no reviews yet.</p>
+        <ul>
+            <li v-for="(item, index) in reviews" :key="index">{{ item.review }}</li>
+        </ul>
+    </div>
+    <ProductReview @review-submitted="addReview" />
 </template>
 
 <script>
 import Product from "./components/Product.vue";
+import ProductReview from "./components/ProductReview.vue";
 export default {
-    components: { Product },
+    components: { Product, ProductReview },
     data() {
         return {
             premium: true,
-            cart: []
+            cart: [],
+            reviews: [],
         };
     },
     methods: {
         updateCart(variantId) {
             this.cart.push(variantId);
         },
-    }
+        addReview(productReview) {
+            console.log(productReview);
+            this.reviews.push(productReview);
+        },
+    },
+    emits: ['eview-submitted']
 };
 </script>
 
