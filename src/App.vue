@@ -12,7 +12,7 @@
             <h1>{{ product }}</h1>
             <p v-if="inventory > 10">In Stock</p>
             <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
-            <p v-else>Out of stock</p>
+            <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
             <ul>
                 <li v-for="detail of details" :key="detail">
                     {{ detail }}
@@ -22,12 +22,17 @@
                 <p
                     class="variant-item"
                     :style="{ backgroundColor: variant.variaColor }"
-                    @mouseover="updateProduct(variant.variantImage)"
-                >
-                </p>
+                    @mouseover="updateProduct(variant)"
+                ></p>
             </div>
 
-            <button @click="addToCart">Add to Cart</button>
+            <button
+                :disabled="!inStock"
+                :class="{ disabledButton: !inStock }"
+                @click="addToCart"
+            >
+                Add to Cart
+            </button>
             <div class="cart">
                 <p>Cart ({{ cart }})</p>
             </div>
@@ -39,22 +44,25 @@
 export default {
     data() {
         return {
-            product: "Socks",
+            product: "",
             image: "./image/vmSocks-blue-onWhite.jpg",
             inventory: 99,
             details: ["80% cotton", "20% polyester", "Gender-neutral"],
             variants: [
                 {
+                    name: "Green Sock",
                     variantId: 2234,
                     variaColor: "green",
                     variantImage: "./image/vmSocks-green-onWhite.jpg",
                 },
                 {
+                    name: "Blue Sock",
                     variantId: 2235,
                     variaColor: "blue",
                     variantImage: "./image/vmSocks-blue-onWhite.jpg",
                 },
             ],
+            inStock: true,
             cart: 0,
         };
     },
@@ -62,9 +70,13 @@ export default {
         addToCart() {
             this.cart += 1;
         },
-        updateProduct(image) {
-            this.image = image;
+        updateProduct(variant) {
+            this.image = variant.variantImage;
+            this.product = variant.name;
         },
+    },
+    mounted() {
+        this.product = this.variants[0].name;
     },
 };
 </script>
@@ -150,6 +162,7 @@ export default {
   
   .disabledButton {
     background-color: #d8d8d8;
+    cursor: not-allowed;
   }
   
   .review-form {
@@ -157,6 +170,10 @@ export default {
     padding: 20px;
     margin: 40px;
     border: 1px solid #d8d8d8;
+  }
+
+  .outOfStock {
+      text-decoration: line-through;
   }
   
   input {
