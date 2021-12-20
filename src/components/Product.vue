@@ -27,13 +27,11 @@
             <button
                 :disabled="!inStock"
                 :class="{ disabledButton: !inStock }"
-                @click="addToCart"
+                @click="$emit('add-to-cart', variants[selectedVariant].variantId)"
             >
                 Add to Cart
             </button>
-            <div class="cart">
-                <p>Cart ({{ cart }})</p>
-            </div>
+           
         </div>
     </div>
 </template>
@@ -44,6 +42,7 @@ export default {
         return {
             product: "",
             selectedVariant: 0,
+            variantId: 0,
             inventory: 99,
             details: ["80% cotton", "20% polyester", "Gender-neutral"],
             variants: [
@@ -61,16 +60,14 @@ export default {
                 },
             ],
             inStock: true,
-            cart: 0,
         };
     },
     methods: {
-        addToCart() {
-            this.cart += 1;
-        },
         updateProduct(index) {
             this.image = this.variants[index].variantImage;
             this.product = this.variants[index].name;
+            this.variantId = this.variants[index].variantId;
+            this.selectedVariant = index;
         },
     },
     created() {
@@ -83,7 +80,8 @@ export default {
 
             return 2.99
         }
-    }
+    },
+    emits: ['add-to-cart']
 };
 </script>
 <style lang="">

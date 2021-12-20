@@ -1,8 +1,11 @@
 <template>
     <div class="nav-bar">
         <img id="logo" alt="Vue logo" src="./assets/logo.png" />
+        <div class="cart">
+            <p>Cart ({{ cart.length }})</p>
+        </div>
     </div>
-    <Product :premium="premium" />
+    <Product @add-to-cart="updateCart" :premium="premium" />
 </template>
 
 <script>
@@ -12,8 +15,14 @@ export default {
     data() {
         return {
             premium: true,
+            cart: []
         };
     },
+    methods: {
+        updateCart(variantId) {
+            this.cart.push(variantId);
+        },
+    }
 };
 </script>
 
