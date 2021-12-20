@@ -18,11 +18,11 @@
                     {{ detail }}
                 </li>
             </ul>
-            <div v-for="variant of variants" :key="variant.variantId">
+            <div v-for="(variant, index) of variants" :key="variant.variantId">
                 <p
                     class="variant-item"
                     :style="{ backgroundColor: variant.variaColor }"
-                    @mouseover="updateProduct(variant)"
+                    @mouseover="updateProduct(index)"
                 ></p>
             </div>
 
@@ -45,7 +45,7 @@ export default {
     data() {
         return {
             product: "",
-            image: "./image/vmSocks-blue-onWhite.jpg",
+            selectedVariant: 0,
             inventory: 99,
             details: ["80% cotton", "20% polyester", "Gender-neutral"],
             variants: [
@@ -70,14 +70,15 @@ export default {
         addToCart() {
             this.cart += 1;
         },
-        updateProduct(variant) {
-            this.image = variant.variantImage;
-            this.product = variant.name;
+        updateProduct(index) {
+            this.image = this.variants[index].variantImage;
+            this.product = this.variants[index].name;
         },
     },
-    mounted() {
-        this.product = this.variants[0].name;
-    },
+    created() {
+        this.product = this.variants[this.selectedVariant].name
+        this.image = this.variants[this.selectedVariant].variantImage
+    }
 };
 </script>
 <style>
