@@ -19,7 +19,17 @@
                 </li>
             </ul>
             <div v-for="variant of variants" :key="variant.variantId">
-                {{ variant.variaColor }}
+                <p
+                    class="variant-item"
+                    :style="{ backgroundColor: variant.variaColor }"
+                    @mouseover="updateProduct(variant.variantImage)"
+                >
+                </p>
+            </div>
+
+            <button @click="addToCart">Add to Cart</button>
+            <div class="cart">
+                <p>Cart ({{ cart }})</p>
             </div>
         </div>
     </div>
@@ -37,13 +47,24 @@ export default {
                 {
                     variantId: 2234,
                     variaColor: "green",
+                    variantImage: "./image/vmSocks-green-onWhite.jpg",
                 },
                 {
                     variantId: 2235,
                     variaColor: "blue",
+                    variantImage: "./image/vmSocks-blue-onWhite.jpg",
                 },
             ],
+            cart: 0,
         };
+    },
+    methods: {
+        addToCart() {
+            this.cart += 1;
+        },
+        updateProduct(image) {
+            this.image = image;
+        },
     },
 };
 </script>
@@ -66,6 +87,12 @@ export default {
     font-family: tahoma;
     color:#282828;
     margin: 0px;
+  }
+
+  .variant-item {
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
   }
   
   .nav-bar {
@@ -118,6 +145,7 @@ export default {
     height: 40px;
     width: 100px;
     font-size: 14px;
+    cursor: pointer;
   } 
   
   .disabledButton {
