@@ -2,13 +2,47 @@
     <div class="nav-bar">
         <img id="logo" alt="Vue logo" src="./assets/logo.png" />
     </div>
+
+    <div class="product">
+        <div class="product-image">
+            <img :src="image" alt="" />
+        </div>
+
+        <div class="product-info">
+            <h1>{{ product }}</h1>
+            <p v-if="inventory > 10">In Stock</p>
+            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+            <p v-else>Out of stock</p>
+            <ul>
+                <li v-for="detail of details" :key="detail">
+                    {{ detail }}
+                </li>
+            </ul>
+            <div v-for="variant of variants" :key="variant.variantId">
+                {{ variant.variaColor }}
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            product: "text",
+            product: "Socks",
+            image: "./image/vmSocks-blue-onWhite.jpg",
+            inventory: 99,
+            details: ["80% cotton", "20% polyester", "Gender-neutral"],
+            variants: [
+                {
+                    variantId: 2234,
+                    variaColor: "green",
+                },
+                {
+                    variantId: 2235,
+                    variaColor: "blue",
+                },
+            ],
         };
     },
 };
@@ -18,7 +52,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
