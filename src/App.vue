@@ -6,26 +6,38 @@
         </div>
     </div>
     <Product @add-to-cart="updateCart" :premium="premium" />
-    <div>
-        <h2>Reviews</h2>
-        <p v-if="!reviews.length">There are no reviews yet.</p>
-        <ul>
-            <li v-for="(item, index) in reviews" :key="index">{{ item.review }}</li>
-        </ul>
-    </div>
-    <ProductReview @review-submitted="addReview" />
+    <Tab @selected-tab-content="selectTabContent" :tabs="tabs">
+        <div class="tab-content" :class="{ active: selectedTabContent == 0 }">
+            <h2>Reviews</h2>
+            <p v-if="!reviews.length">There are no reviews yet.</p>
+            <ul>
+                <li v-for="(item, index) in reviews" :key="index">
+                    {{ item.review }}
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content" :class="{ active: selectedTabContent == 1 }">
+            <ProductReview @review-submitted="addReview" />
+        </div>
+    </Tab>
 </template>
 
 <script>
 import Product from "./components/Product.vue";
 import ProductReview from "./components/ProductReview.vue";
+import Tab from "./components/Tab.vue";
 export default {
-    components: { Product, ProductReview },
+    components: { Product, ProductReview, Tab },
     data() {
         return {
             premium: true,
             cart: [],
             reviews: [],
+            tabs: [
+                { index: 0, text: "Reviews" },
+                { index: 1, text: "Make a review" },
+            ],
+            selectedTabContent: 0,
         };
     },
     methods: {
@@ -36,12 +48,18 @@ export default {
             console.log(productReview);
             this.reviews.push(productReview);
         },
+        selectTabContent(tab) {
+            this.selectedTabContent = tab.index;
+        },
     },
-    emits: ['eview-submitted']
+    emits: ["eview-submitted"],
 };
 </script>
 
 <style>
+.tab-content:not(.active) {
+    display: none;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -156,6 +174,5 @@ export default {
     color: #16C0B0;
     text-decoration: underline;
   }
-@mohammadrezabehruz
 
 </style>
